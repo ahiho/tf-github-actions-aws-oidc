@@ -53,5 +53,13 @@ resource "aws_iam_role" "github_actions_role" {
     ]
   })
 
-  managed_policy_arns = each.value
+  managed_policy_arns = each.value.managed_policy_arns
+
+  dynamic "inline_policy" {
+    for_each = length(each.value.inline_policy) > 0 ? [each.value.inline_policy] : []
+    content {
+      name   = "GithubAction_Policy_${each.key}"
+      policy = inline_policy.value
+    }
+  }
 }

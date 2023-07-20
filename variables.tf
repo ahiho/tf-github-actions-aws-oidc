@@ -22,6 +22,6 @@ variable "oidc_provider_arn" {
 }
 
 variable "repo_policies" {
-  type        = map(list(string))
+  type        = map(object({ inline_policy = string, managed_policy_arns = list(string) }))
   description = "Repository name and policy ARN key/value pairs"
 }
