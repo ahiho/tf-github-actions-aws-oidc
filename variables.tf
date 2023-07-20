@@ -15,10 +15,6 @@ variable "oidc_provider_arn" {
   type        = string
   description = "(optional) Required if create_oidc_provider=false"
   default     = ""
-  validation {
-    condition     = var.create_oidc_provider == false
-    error_message = "oidc_provider_arn is required if create_oidc_provider is false"
-  }
 }
 
 variable "repo_policies" {
