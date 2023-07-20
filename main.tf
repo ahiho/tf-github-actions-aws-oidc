@@ -9,7 +9,7 @@ terraform {
 
 resource "aws_iam_role" "github_actions_role" {
   for_each = var.repo_policies
-  name = "GithubAction_Role_${each.key}"
+  name     = "GithubAction_Role_${replace(each.key, "/", "@")}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -22,7 +22,7 @@ resource "aws_iam_role" "github_actions_role" {
         }
         Condition = {
           StringEquals = {
-            "token.actions.githubusercontent.com:sub" : "repo:${replace(each.key, "/", "@")}"
+            "token.actions.githubusercontent.com:sub" : "repo:${each.key}"
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
           }
         }
