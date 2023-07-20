@@ -26,7 +26,7 @@ resource "aws_iam_role" "github_actions_role" {
         }
         Condition = {
           StringLike = {
-            "token.actions.githubusercontent.com:sub" : contains(coalescelist(each.value.branches, ["*"]), "*") ? "${each.value.repo}:*" : [for branch in each.value.branches : "${each.value.repo}:ref:refs/heads/${branch}"]
+            "token.actions.githubusercontent.com:sub" : contains(coalescelist(each.value.branches, ["*"]), "*") ? "repo:${each.value.repo}:*" : [for branch in each.value.branches : "repo:${each.value.repo}:ref:refs/heads/${branch}"]
           }
           StringEquals = {
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
