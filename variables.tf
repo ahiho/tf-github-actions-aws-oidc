@@ -1,19 +1,6 @@
-variable "org" {
-  type        = string
-  description = "Github organization name"
-  default     = "ahiho"
-}
-
-
-variable "create_oidc_provider" {
-  type        = bool
-  description = "(optional) Create OIDC provider"
-  default     = true
-}
-
 variable "oidc_provider_arn" {
   type        = string
-  description = "(optional) Required if create_oidc_provider=false"
+  description = "ARN of github actions oidc provider"
   default     = ""
 }
 
