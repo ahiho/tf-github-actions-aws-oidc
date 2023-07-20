@@ -13,7 +13,7 @@ resource "aws_iam_role" "github_actions_role" {
     sha1("${rp.repo}/${join(",", rp.branches)}") => rp
   }
 
-  name = "GithubAction_Role_${replace(each.repo, "/", "@")}_${md5(join(",", length(each.branches) || contains(each.branches, "*") == 0 ? ["*"] : each.branches))}"
+  name = "GithubAction_Role_${replace(each.value.repo, "/", "@")}_${md5(join(",", length(each.value.branches) || contains(each.value.branches, "*") == 0 ? ["*"] : each.value.branches))}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -26,7 +26,7 @@ resource "aws_iam_role" "github_actions_role" {
         }
         Condition = {
           StringLike = {
-            "token.actions.githubusercontent.com:sub" : length(each.branches) == 0 || contains(each.branches, "*") ? "${each.repo}:*" : [for branch in each.branches : "${each.repo}:ref:refs/heads/${branch}"]
+            "token.actions.githubusercontent.com:sub" : length(each.value.branches) == 0 || contains(each.value.branches, "*") ? "${each.value.repo}:*" : [for branch in each.value.branches : "${each.value.repo}:ref:refs/heads/${branch}"]
           }
           StringEquals = {
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
