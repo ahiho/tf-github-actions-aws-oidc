@@ -13,7 +13,7 @@ resource "aws_iam_role" "github_actions_role" {
     sha1("${rp.repo}/${join(",", coalescelist(rp.branches, ["*"]))}") => rp
   }
 
-  name = "GithubAction_Role_${replace(each.value.repo, "/", "@")}_${md5(join(",", coalescelist(each.value.branches, ["*"])))}"
+  name = substr("GithubAction_${substr(md5(join(",", coalescelist(each.value.branches, ["*"]))), 0, 16)}_${replace(each.value.repo, "/", "@")}", 0, 64)
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
