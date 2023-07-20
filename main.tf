@@ -22,7 +22,7 @@ resource "aws_iam_role" "github_actions_role" {
         }
         Condition = {
           StringEquals = {
-            "token.actions.githubusercontent.com:sub" : "repo:${each.key}"
+            "token.actions.githubusercontent.com:sub" : "repo:${replace(each.key, "/", "@")}"
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
           }
         }
@@ -35,7 +35,7 @@ resource "aws_iam_role" "github_actions_role" {
   dynamic "inline_policy" {
     for_each = length(each.value.inline_policy) > 0 ? [each.value.inline_policy] : []
     content {
-      name   = "GithubAction_Policy_${each.key}"
+      name   = "GithubAction_Policy_${replace(each.key, "/", "@")}"
       policy = inline_policy.value
     }
   }
