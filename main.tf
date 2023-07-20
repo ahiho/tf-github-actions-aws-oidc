@@ -25,7 +25,7 @@ resource "aws_iam_openid_connect_provider" "github_actions" {
 }
 
 locals {
-  oidc_provider_arn = var.create_oidc_provider ? aws_iam_openid_connect_provider.github[0].arn : var.oidc_provider_arn
+  oidc_provider_arn = var.create_oidc_provider ? aws_iam_openid_connect_provider.github_actions[0].arn : var.oidc_provider_arn
 }
 
 
