@@ -10,7 +10,7 @@ terraform {
 resource "aws_iam_role" "github_actions_role" {
   for_each = {
     for index, rp in var.repo_policies :
-    sha1("${rp.repo}/${join(",", rp.branches)}") => rp
+    sha1("${rp.repo}/${join(",", len(rp.branches) == 0 ? ["*"] : rp.branches)}") => rp
   }
 
   name = "GithubAction_Role_${replace(each.value.repo, "/", "@")}_${md5(join(",", length(each.value.branches) == 0 || contains(each.value.branches, "*") ? ["*"] : each.value.branches))}"
