@@ -8,8 +8,12 @@ terraform {
 }
 
 resource "aws_iam_role" "github_actions_role" {
-  for_each = var.repo_policies
-  name     = "GithubAction_Role_${replace(each.repo, "/", "@")}_${md5(join(",", length(each.branches) || contains(each.branches, "*") == 0 ? ["*"] : each.branches))}"
+  for_each = {
+    for index, rp in var.repo_policies :
+    sha1("${rp.repo}/${join(",", rp.branches)}") => rp
+  }
+
+  name = "GithubAction_Role_${replace(each.repo, "/", "@")}_${md5(join(",", length(each.branches) || contains(each.branches, "*") == 0 ? ["*"] : each.branches))}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
